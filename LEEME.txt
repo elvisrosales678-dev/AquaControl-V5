@@ -1,0 +1,1 @@
+AquaControl V5: publica todos los archivos de esta carpeta en Netlify Drop. AquaBot contiene una base ampliada de respuestas guiadas, no IA generativa. Conserva MQTT en el tema aquacontrol/pia2026/elvis481582915079723009/niveles. Las noticias son ficticias.

@@ -1,0 +1,240 @@
+[
+  {
+    "terms": [
+      "que es aquacontrol",
+      "funciona aquacontrol",
+      "objetivo",
+      "proyecto"
+    ],
+    "answer": "AquaControl es un prototipo académico para automatizar el traslado de agua desde una alberca inferior hasta un tanque elevado. Un ESP32 lee dos niveles simulados, decide si activar el relé y muestra el estado en una matriz LED. El agua del tanque superior se distribuye por gravedad."
+  },
+  {
+    "terms": [
+      "problema",
+      "necesidad",
+      "costa",
+      "intermitente",
+      "almacenamiento"
+    ],
+    "answer": "En viviendas con suministro intermitente es necesario vigilar la llegada del agua, el llenado de la alberca y el bombeo. La automatización busca reducir reboses, evitar trabajo en seco y mantener agua disponible en el tanque superior."
+  },
+  {
+    "terms": [
+      "alberca",
+      "cisterna",
+      "deposito inferior"
+    ],
+    "answer": "La alberca es el depósito inferior que recibe agua de la red pública. El controlador solo permite bombear si su nivel supera el umbral mínimo de seguridad del 20 %."
+  },
+  {
+    "terms": [
+      "tanque elevado",
+      "tanque superior",
+      "gravedad"
+    ],
+    "answer": "El tanque elevado recibe agua de la bomba. Desde allí la vivienda se abastece por gravedad. El bombeo se solicita cuando su nivel llega al 30 % o menos y se detiene al alcanzar el 90 %."
+  },
+  {
+    "terms": [
+      "cuando enciende",
+      "encender bomba",
+      "arranque",
+      "bomba on"
+    ],
+    "answer": "La bomba se enciende cuando el tanque elevado está al 30 % o menos y la alberca supera el 20 %. En Wokwi esto se observa con el LED azul, el relé y el monitor serial."
+  },
+  {
+    "terms": [
+      "cuando apaga",
+      "apagar bomba",
+      "parada",
+      "bomba off"
+    ],
+    "answer": "La bomba se detiene si el tanque llega al 90 % o si la alberca cae al 20 % o menos. La protección por falta de agua tiene prioridad sobre el llenado."
+  },
+  {
+    "terms": [
+      "histeresis",
+      "umbral",
+      "30",
+      "90"
+    ],
+    "answer": "La histéresis utiliza dos umbrales diferentes: 30 % para solicitar llenado y 90 % para detenerlo. Así la bomba no cambia de estado constantemente por pequeñas variaciones."
+  },
+  {
+    "terms": [
+      "blocked",
+      "bloqueado",
+      "sin agua"
+    ],
+    "answer": "BLOCKED indica que la alberca está al 20 % o menos. El relé debe quedar apagado para evitar que la bomba funcione sin suficiente agua."
+  },
+  {
+    "terms": [
+      "running",
+      "bombeando",
+      "ejecucion"
+    ],
+    "answer": "RUNNING indica que la lógica de control mantiene activado el bombeo. No debe confundirse con el estado Running de una tarea del planificador FreeRTOS."
+  },
+  {
+    "terms": [
+      "waiting",
+      "espera"
+    ],
+    "answer": "WAITING significa que la bomba está apagada y el sistema espera una condición de arranque. En el prototipo es un estado de control hidráulico, no necesariamente el estado de una tarea FreeRTOS."
+  },
+  {
+    "terms": [
+      "estado",
+      "fsm",
+      "maquina de estados"
+    ],
+    "answer": "La máquina de estados finitos representa tres condiciones del control: WAITING (espera), RUNNING (bombeo) y BLOCKED (falta de agua). Las transiciones dependen de los niveles y umbrales. Los estados del planificador de FreeRTOS son un concepto distinto."
+  },
+  {
+    "terms": [
+      "freertos",
+      "sistema operativo",
+      "rtos"
+    ],
+    "answer": "FreeRTOS es un sistema operativo de tiempo real usado para organizar tareas del ESP32. En AquaControl separa lectura de niveles, decisiones sobre el relé, actualización de pantalla y telemetría."
+  },
+  {
+    "terms": [
+      "tarea",
+      "planificacion",
+      "prioridad"
+    ],
+    "answer": "Una tarea es una unidad de ejecución. El control de la bomba debe tener prioridad suficiente para responder a condiciones inseguras; las tareas de visualización y registro pueden ejecutarse con menor prioridad."
+  },
+  {
+    "terms": [
+      "concurrencia",
+      "multitarea"
+    ],
+    "answer": "La concurrencia permite atender sensores, control y pantalla mediante tareas que se alternan según el planificador de FreeRTOS. No significa que todos los trabajos se ejecuten siempre en el mismo instante."
+  },
+  {
+    "terms": [
+      "mutex",
+      "semaforo",
+      "sincronizacion"
+    ],
+    "answer": "Un mutex protege datos compartidos, como niveles y estado de la bomba, para evitar accesos simultáneos inconsistentes. Un semáforo puede señalizar eventos entre tareas."
+  },
+  {
+    "terms": [
+      "cola",
+      "queue",
+      "lecturas"
+    ],
+    "answer": "Una cola de FreeRTOS permite que la tarea de sensores envíe lecturas a la tarea de control de forma ordenada, desacoplando la medición de la decisión."
+  },
+  {
+    "terms": [
+      "polling",
+      "muestreo",
+      "periodico"
+    ],
+    "answer": "El polling consiste en consultar los sensores a intervalos definidos. En el prototipo las lecturas se actualizan periódicamente, sin necesidad de que el usuario intervenga."
+  },
+  {
+    "terms": [
+      "esp32",
+      "microcontrolador"
+    ],
+    "answer": "El ESP32 es el controlador embebido que recibe las lecturas analógicas, ejecuta las reglas, conmuta el relé y puede publicar datos por Wi-Fi."
+  },
+  {
+    "terms": [
+      "potenciometro",
+      "perilla",
+      "analogico"
+    ],
+    "answer": "En Wokwi hay dos potenciómetros: el izquierdo simula el nivel de la alberca y el derecho el del tanque elevado. Sus señales analógicas se convierten en porcentajes de 0 a 100."
+  },
+  {
+    "terms": [
+      "hc-sr04",
+      "ultrasonico",
+      "sensor real"
+    ],
+    "answer": "Los HC-SR04 son una opción estudiada para medir distancia hasta el agua, pero el prototipo actual de Wokwi usa potenciómetros. En un montaje físico el ECHO de un HC-SR04 convencional necesita adaptación de 5 V a 3,3 V para el ESP32."
+  },
+  {
+    "terms": [
+      "rele",
+      "relay",
+      "actuador"
+    ],
+    "answer": "El relé es el interruptor controlado por el ESP32 que representa la activación de la bomba. El prototipo usa un indicador LED; una bomba real requiere alimentación y protecciones adecuadas."
+  },
+  {
+    "terms": [
+      "matriz",
+      "max7219",
+      "pantalla",
+      "led"
+    ],
+    "answer": "La matriz MAX7219 muestra símbolos para alberca, tanque, bomba y alarma. Complementa el monitor serial, donde se observan los porcentajes exactos y el estado ON/OFF."
+  },
+  {
+    "terms": [
+      "mqtt",
+      "sincronizar",
+      "sincronizacion web",
+      "wokwi web"
+    ],
+    "answer": "MQTT transmite mensajes entre Wokwi y la página. El ESP32 publica niveles y estado de bomba; la página se suscribe al mismo tema y actualiza los depósitos. Se requiere Internet y que el sketch con PubSubClient esté ejecutándose."
+  },
+  {
+    "terms": [
+      "wifi",
+      "internet",
+      "broker"
+    ],
+    "answer": "Wokwi simula Wi-Fi mediante Wokwi-GUEST. En esta demostración la telemetría MQTT utiliza un broker público, por lo que no deben enviarse datos privados ni utilizarlo para controlar una bomba real."
+  },
+  {
+    "terms": [
+      "falla",
+      "seguridad",
+      "riesgo"
+    ],
+    "answer": "La regla de seguridad principal es detener el bombeo cuando la alberca tiene poca agua. En un montaje real también se necesitarían validación de sensores, protección eléctrica y una etapa de potencia apropiada."
+  },
+  {
+    "terms": [
+      "prueba",
+      "validacion",
+      "evidencia"
+    ],
+    "answer": "Las pruebas clave son: tanque bajo con alberca suficiente (bomba ON), tanque lleno (OFF), alberca sin agua (OFF y alarma) y recuperación del nivel inferior (ON si el tanque sigue bajo)."
+  },
+  {
+    "terms": [
+      "alcantarillado",
+      "acueducto",
+      "inversion",
+      "noticia"
+    ],
+    "answer": "Las tarjetas de noticias de la página son escenarios ficticios para contextualizar el problema. No son noticias reales ni anuncios de obras o inversiones verificadas."
+  },
+  {
+    "terms": [
+      "beneficio",
+      "ahorro",
+      "ventaja"
+    ],
+    "answer": "Los beneficios esperados son menor supervisión manual, prevención de reboses, protección de la bomba y mejor disponibilidad de agua. El prototipo no demuestra todavía ahorros cuantificados."
+  },
+  {
+    "terms": [
+      "netlify",
+      "pagina",
+      "publicar"
+    ],
+    "answer": "Netlify permite publicar los archivos estáticos de AquaControl. El simulador web puede abrirse localmente; para sincronización MQTT se requiere conexión a Internet."
+  }
+]
